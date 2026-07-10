@@ -58,6 +58,16 @@ bool KeyProtector::init(const std::filesystem::path& dataDir) {
     return true;
 }
 
+bool KeyProtector::initWithMasterKey(const Bytes& masterKey) {
+    if (masterKey.size() != 32) {
+        fprintf(stderr, "[KeyProtector] initWithMasterKey: размер %zu ≠ 32\n",
+                masterKey.size());
+        return false;
+    }
+    m_masterKey = masterKey;
+    return true;
+}
+
 Bytes KeyProtector::deriveKey(const Bytes& label, int bytes) const {
     if (m_masterKey.empty()) {
         fprintf(stderr, "[KeyProtector] deriveKey вызван до init()\n");

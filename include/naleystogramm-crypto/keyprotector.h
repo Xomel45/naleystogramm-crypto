@@ -16,6 +16,11 @@ public:
     // Загрузить или сгенерировать мастер-ключ. Вызывать до всех остальных методов.
     bool init(const std::filesystem::path& dataDir);
 
+    // Принять мастер-ключ извне (ровно 32 байта), минуя <dataDir>/master.key.
+    // Для платформ с собственным хранилищем ключей: Android-мост держит ключ
+    // запечатанным в Android Keystore и передаёт его сюда при старте (v0.9.0).
+    bool initWithMasterKey(const Bytes& masterKey);
+
     [[nodiscard]] bool isReady() const noexcept { return !m_masterKey.empty(); }
 
     // HKDF-SHA256(masterKey, label) → дочерний ключ длиной bytes
